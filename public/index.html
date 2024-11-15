@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<head>
+
+</head>
+
+<body>
+
+
+    <input type="submit" value="tutte" onclick="mostraRicette('/ricette')">
+    <input type="submit" value="facili" onclick="mostraRicette('/ricette/facili')">
+
+   
+    <div id="out"></div>
+
+    <script>
+    
+        function mostraRicette(endpoint) {
+        
+            document.getElementById("out").innerHTML = '<p id="spin">caricamento...</p>';
+
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function () {
+                
+                let res = JSON.parse(this.responseText);
+                let outputDiv = document.getElementById("out");
+                outputDiv.innerHTML = "";
+
+    
+                res.ricette.forEach(ricetta => {
+                    let p = document.createElement("P");
+                    p.innerHTML = `<strong>${ricetta.titolo}</strong><br> Difficoltà: ${ricetta.difficolta}<br> Tipo di ricetta: ${ricetta.tipo}<br>
+                                   Descrizione: ${ricetta.descrizione}<br>
+                                   Ingredienti Essenziali: ${ricetta.ingredienti_essenziali.join(", ")}<br>
+                                   Ingredienti Aggiuntivi: ${ricetta.ingredienti_aggiuntivi.join(", ")}<br>
+                                   Istruzioni: ${ricetta.istruzioni}<br><br>`;
+                    outputDiv.appendChild(p);
+                });
+
+                
+                document.getElementById("spin").innerHTML = "";
+            };
+
+            
+            xhttp.open("GET", endpoint, true);
+            xhttp.send();
+        }
+    </script>
+
+</body>
+
